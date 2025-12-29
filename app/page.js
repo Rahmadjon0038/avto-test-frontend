@@ -1,10 +1,8 @@
-import Image from "next/image";
+import HomePage from "@/componets/home/HomePage";
 
 function Home() {
   return (
-    <div>
-      salomat uka Avto testga xush kelibsan 
-    </div>
+    <HomePage/>
   );
 }
 export default Home
