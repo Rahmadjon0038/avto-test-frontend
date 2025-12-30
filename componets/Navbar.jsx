@@ -2,8 +2,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, User, BookOpen, GraduationCap, History, CreditCard } from 'lucide-react';
+import Profile from './Profile';
+import { useGetMe } from '@/hooks/user';
 
 const Navbar = () => {
+  // ---- getme hook -----
+  const { data, isLoading, error } = useGetMe()
   const [isOpen, setIsOpen] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false); // Kelajakda backend bilan ulanadi
 
@@ -16,7 +20,7 @@ const Navbar = () => {
     <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          
+
           {/* LOGO */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
@@ -32,8 +36,8 @@ const Navbar = () => {
           {/* DESKTOP MENU */}
           <div className="hidden md:flex gap-12 items-center space-x-6">
             {menuItems.map((item) => (
-              <Link 
-                key={item.name} 
+              <Link
+                key={item.name}
                 href={item.href}
                 className="flex items-center gap-1.5 text-gray-600 hover:text-blue-600 font-medium transition-all"
               >
@@ -46,26 +50,27 @@ const Navbar = () => {
           {/* USER & STATUS */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Obuna statusi */}
-            <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${
-              isSubscribed 
-                ? 'bg-green-50 text-green-600 border-green-200' 
+            <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${isSubscribed
+                ? 'bg-green-50 text-green-600 border-green-200'
                 : 'bg-orange-50 text-orange-600 border-orange-200'
-            }`}>
+              }`}>
               <CreditCard size={14} />
               {isSubscribed ? 'PREMIUM' : 'DEMO'}
             </div>
 
-            <Link href="/profile" className="flex items-center gap-2 bg-gray-50 p-1.5 pr-4 rounded-full hover:bg-gray-100 transition-all border border-gray-200">
-              <div className="bg-blue-100 text-blue-600 p-1.5 rounded-full">
-                <User size={18} />
-              </div>
-              <span className="text-sm font-semibold text-gray-700">Profil</span>
-            </Link>
+            <Profile profiledata={{ data, isLoading, error }}>
+              <button className="flex items-center gap-2 bg-gray-50 p-1.5 pr-4 rounded-full hover:bg-gray-100 transition-all border border-gray-200">
+                <div className="bg-blue-100 text-blue-600 p-1.5 rounded-full">
+                  <User size={18} />
+                </div>
+                <span className="text-sm font-semibold text-gray-700">Profil</span>
+              </button>
+            </Profile>
           </div>
 
           {/* MOBILE MENU BUTTON */}
           <div className="md:hidden">
-            <button 
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all"
             >
@@ -91,7 +96,7 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="pt-4 flex flex-col gap-3">
-              <Link 
+              <Link
                 href="/profile"
                 className="w-full flex justify-center items-center gap-2 bg-blue-600 text-white py-3 rounded-xl font-bold"
               >
