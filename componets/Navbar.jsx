@@ -9,7 +9,6 @@ const Navbar = () => {
   // ---- getme hook -----
   const { data, isLoading, error } = useGetMe()
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false); // Kelajakda backend bilan ulanadi
 
   const menuItems = [
     { name: 'Imtihon', href: '/exam', icon: <GraduationCap size={18} /> },
@@ -49,14 +48,7 @@ const Navbar = () => {
 
           {/* USER & STATUS */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Obuna statusi */}
-            <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${isSubscribed
-                ? 'bg-green-50 text-green-600 border-green-200'
-                : 'bg-orange-50 text-orange-600 border-orange-200'
-              }`}>
-              <CreditCard size={14} />
-              {isSubscribed ? 'PREMIUM' : 'DEMO'}
-            </div>
+            
 
             <Profile profiledata={{ data, isLoading, error }}>
               <button className="flex items-center gap-2 bg-gray-50 p-1.5 pr-4 rounded-full hover:bg-gray-100 transition-all border border-gray-200">
