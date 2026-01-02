@@ -135,7 +135,7 @@ const Admin = () => {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Link href={`/admin/tikets/${ticket.ticket_number}`} className="flex items-center gap-2 px-4 py-2 text-xs font-black uppercase bg-white border-2 border-slate-100 text-slate-600 rounded-xl hover:border-blue-600 transition-all"><MdLibraryAdd size={18} /> Testlar</Link>
+                    <Link href={`/admin/tikets/${ticket.id}`} className="flex items-center gap-2 px-4 py-2 text-xs font-black uppercase bg-white border-2 border-slate-100 text-slate-600 rounded-xl hover:border-blue-600 transition-all"><MdLibraryAdd size={18} /> Testlar</Link>
                     <button onClick={() => handleOpenModal(true, ticket)} className="p-3 text-slate-300 hover:text-blue-600 hover:bg-blue-50 rounded-xl"><MdEdit size={22} /></button>
                     <button onClick={() => confirmDelete(ticket)} className="p-3 text-slate-300 hover:text-red-600 hover:bg-red-50 rounded-xl"><MdDelete size={22} /></button>
                   </div>
