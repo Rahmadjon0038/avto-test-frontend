@@ -4,6 +4,7 @@ import Navbar from "@/componets/Navbar";
 import QueryProvider from "@/componets/QueryProvider";
 import { Toaster } from "react-hot-toast";
 import NavbarWrapper from "@/componets/HideNavbar";
+import ThemeProvider from "@/componets/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,15 +23,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="uz">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors`}
       >
-        <QueryProvider>
-          <NavbarWrapper/>
-          <Toaster/>
-          {children}
-        </QueryProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <NavbarWrapper/>
+            <Toaster/>
+            {children}
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

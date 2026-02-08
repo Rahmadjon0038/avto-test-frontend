@@ -3,25 +3,39 @@ import * as React from 'react';
 import { Box, Modal, Typography, Divider, Skeleton, Fade, Backdrop } from '@mui/material';
 import { X, User, Phone, ShieldCheck, LogOut, Calendar, ChevronRight, BadgeCheck } from 'lucide-react';
 import Cookies from 'js-cookie';
+import { useTheme } from './ThemeProvider';
 
-const style = {
+const getStyle = (isDark) => ({
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: { xs: '95%', sm: 600 },
-    bgcolor: '#F8FAFC',
+    bgcolor: isDark ? '#1e293b' : '#F8FAFC',
     borderRadius: '32px',
     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
     p: 0,
     outline: 'none',
     overflow: 'hidden',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(255, 255, 255, 0.3)',
+});
+
+// Formats membership date in a simple YYYY-MM-DD form
+const formatMembershipDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return 'N/A';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 };
 
 export default function Profile({ children, profiledata }) {
     const { data, isLoading } = profiledata;
     const [open, setOpen] = React.useState(false);
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -49,7 +63,7 @@ export default function Profile({ children, profiledata }) {
                 }}
             >
                 <Fade in={open}>
-                    <Box sx={style}>
+                    <Box sx={getStyle(isDark)}>
                         {/* Elegant Header */}
                         <div className="relative overflow-hidden bg-gradient-to-br from-[#1e293b] via-[#0f172a] to-[#1e293b] p-8 pb-10">
                             {/* Dekorativ aylana */}
@@ -96,7 +110,7 @@ export default function Profile({ children, profiledata }) {
                         </div>
 
                         {/* Content Section */}
-                        <div className="px-6 py-8 -mt-6 bg-[#F8FAFC] rounded-t-[32px] relative z-20 space-y-4">
+                        <div className={`px-6 py-8 -mt-6 ${isDark ? 'bg-slate-800' : 'bg-[#F8FAFC]'} rounded-t-[32px] relative z-20 space-y-4`}>
                             
                             {/* Info Cards */}
                             <div className="space-y-3">
@@ -104,36 +118,39 @@ export default function Profile({ children, profiledata }) {
                                     icon={<Phone size={18} />} 
                                     label="Telefon raqam" 
                                     value={data?.phone} 
-                                    isLoading={isLoading} 
+                                    isLoading={isLoading}
+                                    isDark={isDark}
                                 />
-                                <InfoRow 
+                                {/* <InfoRow 
                                     icon={<ShieldCheck size={18} />} 
                                     label="Hisob turi" 
                                     value={data?.isSubscribed ? 'Premium Plus' : 'Bepul Versiya'} 
                                     isLoading={isLoading}
                                     isStatus
                                     statusActive={data?.isSubscribed}
-                                />
+                                    isDark={isDark}
+                                /> */}
                                 <InfoRow 
                                     icon={<Calendar size={18} />} 
                                     label="A'zolik sanasi" 
-                                    value={new Date(data?.createdAt).toLocaleDateString('uz-UZ', { year: 'numeric', month: 'long', day: 'numeric' })} 
-                                    isLoading={isLoading} 
+                                    value={formatMembershipDate(data?.createdAt)} 
+                                    isLoading={isLoading}
+                                    isDark={isDark}
                                 />
                             </div>
 
                             <div className="pt-4">
                                 <button 
                                     onClick={logout}
-                                    className="w-full group flex items-center justify-between py-4 px-6 bg-white hover:bg-red-50 border border-slate-200 hover:border-red-100 rounded-2xl transition-all duration-300 shadow-sm"
+                                    className={`w-full group flex items-center justify-between py-4 px-6 ${isDark ? 'bg-slate-700 hover:bg-red-900/30 border-slate-600 hover:border-red-800' : 'bg-white hover:bg-red-50 border-slate-200 hover:border-red-100'} border rounded-2xl transition-all duration-300 shadow-sm`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-red-50 text-red-500 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors">
+                                        <div className={`p-2 ${isDark ? 'bg-red-900/40' : 'bg-red-50'} text-red-500 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors`}>
                                             <LogOut size={18} />
                                         </div>
-                                        <span className="font-bold text-slate-600 group-hover:text-red-600 transition-colors">Hisobdan chiqish</span>
+                                        <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-600'} group-hover:text-red-600 transition-colors`}>Hisobdan chiqish</span>
                                     </div>
-                                    <ChevronRight size={16} className="text-slate-300 group-hover:text-red-300 transition-colors" />
+                                    <ChevronRight size={16} className={`${isDark ? 'text-slate-500' : 'text-slate-300'} group-hover:text-red-300 transition-colors`} />
                                 </button>
                             </div>
                         </div>
@@ -145,18 +162,18 @@ export default function Profile({ children, profiledata }) {
 }
 
 // Yordamchi komponent - Qatorlar uchun
-function InfoRow({ icon, label, value, isLoading, isStatus = false, statusActive = false }) {
+function InfoRow({ icon, label, value, isLoading, isStatus = false, statusActive = false, isDark = false }) {
     return (
-        <div className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
-            <div className="w-10 h-10 shrink-0 bg-slate-50 rounded-xl flex items-center justify-center text-slate-500">
+        <div className={`flex items-center gap-4 p-4 ${isDark ? 'bg-slate-700 border-slate-600' : 'bg-white border-slate-100'} border rounded-2xl shadow-[0_2px_4px_rgba(0,0,0,0.02)]`}>
+            <div className={`w-10 h-10 shrink-0 ${isDark ? 'bg-slate-600 text-slate-400' : 'bg-slate-50 text-slate-500'} rounded-xl flex items-center justify-center`}>
                 {icon}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
+                <p className={`text-[11px] font-bold ${isDark ? 'text-slate-500' : 'text-slate-400'} uppercase tracking-wider mb-0.5`}>{label}</p>
                 {isLoading ? (
-                    <Skeleton width="70%" height={20} />
+                    <Skeleton width="70%" height={20} sx={{ bgcolor: isDark ? 'rgba(255,255,255,0.1)' : undefined }} />
                 ) : (
-                    <p className={`text-[15px] font-bold truncate ${isStatus ? (statusActive ? 'text-blue-600' : 'text-orange-500') : 'text-slate-700'}`}>
+                    <p className={`text-[15px] font-bold truncate ${isStatus ? (statusActive ? 'text-blue-600' : 'text-orange-500') : (isDark ? 'text-slate-200' : 'text-slate-700')}`}>
                         {value}
                     </p>
                 )}

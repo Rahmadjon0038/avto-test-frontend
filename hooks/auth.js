@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
+import { instance } from "./api"
 
-const { instance } = require("./api")
+
 
 const register = async ({ formData }) => {
     const response = await instance.post('/api/auth/register', formData)
